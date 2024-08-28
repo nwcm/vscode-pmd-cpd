@@ -15,24 +15,20 @@ export class CPDCache {
 
     public constructor() {
         this.duplicateData = new Map<string, Array<DuplicationData>>();
-        console.debug('CPDCache');
         // this.diagnosticCollection = vscode.languages.createDiagnosticCollection("PMD CPD");
 
         var self = this;
         this.fileHunter = new FileHunter(
             "**/*.xml",
             async (file) => {
-                console.debug('verify');
                 const data = await vscode.workspace
                     .fs
                     .readFile(file);
 
                 const result = data.toString().includes("<pmd-cpd");
-                console.debug(result);
                 return result;
             },
             (file) => {
-                console.log("Registering file watchers");
                 this.readData(file);
                 var watcher = vscode.workspace.createFileSystemWatcher(
                     new vscode.RelativePattern(file, '*')
@@ -58,7 +54,6 @@ export class CPDCache {
      * @param file uri to the cpd xml file to process
      */
     private readData(file: vscode.Uri) {
-        console.debug('readData');
         var self = this;
 
         vscode.workspace.fs.readFile(file)

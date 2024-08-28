@@ -1,6 +1,6 @@
-# Code analysis gutters
+# PMD Copy Paste Detection
 
-A tool to highlight lines and show other information relating to the results of various code analysis tools.
+A tool to highlight lines of duplicated code flagged by PMD CPD CLI
 
 ## Features
 
@@ -11,7 +11,9 @@ A tool to highlight lines and show other information relating to the results of 
 
 ## Requirements
 
-No additional requirements.
+- [PMD CLI 7.0.0](https://github.com/pmd/pmd/releases/latest) or higher
+- Output to `reports/cpd.xml` 
+  - `pmd cpd --minimum-tokens 100 --format xml --language apex --dir force-app\main > reports/cpd.xml`
 
 ## Extension Settings
 
@@ -19,17 +21,5 @@ No settings at this time.
 
 ## Known Issues
 
-- I've just started this thing, it worked for my use-case. I'm quite sure it has problems.
-- The color choice is terrible and doesn't account for themes. Help Welcome.
+- Likely a few
 
-## Release Notes
-
-Initial release.
-
-### 0.0.3
-
-- Generally usable. Can filter by different options to reduce cognitive load.
-
-### 0.0.1
-
-- Project start, baseline functionality.

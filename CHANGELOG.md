@@ -1,9 +1,9 @@
 # Change Log
 
-All notable changes to the "pmd-gutters" extension will be documented in this file.
+All notable changes to the "pmd-cpd" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## Release Notes
 
-## [Unreleased]
+### 0.1.0 Initial release
 
-- Initial release
+- Rework of https://github.com/opendcs/codeanalysis-gutters to be specific to PMD CPD.
