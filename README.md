@@ -1,4 +1,4 @@
-# PMD Copy Paste Detection
+# PMD Copy Paste Detection VSCode Extension
 
 A tool to highlight lines of duplicated code flagged by PMD CPD CLI
 
