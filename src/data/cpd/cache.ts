@@ -10,13 +10,13 @@ export class CPDCache {
     private duplicateData: Map<string, Array<DuplicationData>>;
     private callbacks = new Array<() => void>();
     private fileHunter: FileHunter;
-    private diagnosticCollection: vscode.DiagnosticCollection
+    // private diagnosticCollection: vscode.DiagnosticCollection
     // private config: CodeAnalysisConfig
 
     public constructor() {
         this.duplicateData = new Map<string, Array<DuplicationData>>();
         console.debug('CPDCache');
-        this.diagnosticCollection = vscode.languages.createDiagnosticCollection("PMD CPD");
+        // this.diagnosticCollection = vscode.languages.createDiagnosticCollection("PMD CPD");
 
         var self = this;
         this.fileHunter = new FileHunter(
@@ -71,7 +71,7 @@ export class CPDCache {
                     //     throw new Error(`Invalid PMD CPD report version. Expected 1.0.0 got ${cpdData["pmd-cpd"].$.version}`)
                     // }
 
-                    this.diagnosticCollection.clear();
+                    // this.diagnosticCollection.clear();
 
                     const duplicates = cpdData["pmd-cpd"]["duplication"];
 
@@ -107,14 +107,14 @@ export class CPDCache {
                             allFiles.forEach((path) => {
                                 if (path.file !== file) {
                                     otherFiles.push(path);
-                                    issues.push(new vscode.Diagnostic(path.range, "Duplicate code", vscode.DiagnosticSeverity.Warning))
+                                    // issues.push(new vscode.Diagnostic(path.range, "Duplicate code", vscode.DiagnosticSeverity.Warning))
                                 }
                             });
 
                             const uriString = file.toString();
                             const dupElement = new DuplicationData(file, otherFiles, startLine, endLine, tokensDuplicate, Number(dupFile.column), Number(dupFile.endColumn));
 
-                            this.diagnosticCollection.set(file, issues);
+                            // this.diagnosticCollection.set(file, issues);
 
                             if (!self.duplicateData.has(uriString)) {
                                 self.duplicateData.set(uriString, new Array<DuplicationData>());
@@ -123,13 +123,9 @@ export class CPDCache {
                             dupSet.push(dupElement);
                         });
 
-                        
+
                     });
                     self.fireChange();
-
-                    // vscode.Diagnostic
-
-                    // connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
                 });
             }, (reason) => {
                 console.log("Could not read duplication data from " + file + " because " + reason);
