@@ -18,7 +18,7 @@ export class CPDGutters {
   public constructor(
     duplicates: CPDCache,
     config: CodeAnalysisConfig,
-    context: vscode.ExtensionContext
+    context: vscode.ExtensionContext,
   ) {
     this.duplicates = duplicates;
     this.config = config;

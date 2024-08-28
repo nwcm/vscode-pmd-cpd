@@ -18,7 +18,7 @@ export class OtherFile {
     line: number,
     endLine: number,
     column: number,
-    endColumn: number
+    endColumn: number,
   ) {
     this.file = file;
     this.line = line;
@@ -32,7 +32,7 @@ export class OtherFile {
       this.line - 1,
       this.column - 1,
       this.endLine - 1,
-      this.endColumn - 1
+      this.endColumn - 1,
     );
   }
 
@@ -89,7 +89,7 @@ export class DuplicationData {
     endLine: number,
     numTokens: number,
     column: number,
-    endColumn: number
+    endColumn: number,
   ) {
     this.thisFile = thisFile;
     this.otherFiles = otherFiles;
@@ -105,7 +105,7 @@ export class DuplicationData {
       this.startLine - 1,
       this.column - 1,
       this.endLine - 1,
-      this.endColumn - 1
+      this.endColumn - 1,
     );
   }
 
@@ -117,11 +117,11 @@ export class DuplicationData {
     var msg = new vscode.MarkdownString("## This is duplicated:\r\n");
     this.otherFiles.forEach((file) => {
       if (file.file.toString() === this.thisFile.toString()) {
-        msg.appendMarkdown(`- [This file at line ${file.line.toFixed(0)}](${file.link()})\r\n`);
-      } else {
         msg.appendMarkdown(
-          `- [${file.linkText()}](${file.link()})\r\n`
+          `- [This file at line ${file.line.toFixed(0)}](${file.link()})\r\n`,
         );
+      } else {
+        msg.appendMarkdown(`- [${file.linkText()}](${file.link()})\r\n`);
       }
     });
     //msg.isTrusted = true;

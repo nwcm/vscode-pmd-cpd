@@ -11,7 +11,7 @@ A tool to highlight lines of duplicated code flagged by PMD CPD CLI
 ## Requirements
 
 - [PMD CLI 7.0.0](https://github.com/pmd/pmd/releases/latest) or higher
-- Output to `reports/cpd.xml` 
+- Output to `reports/cpd.xml`
   - `pmd cpd --minimum-tokens 100 --format xml --language apex --dir force-app\main > reports/cpd.xml`
 
 ## Extension Settings
@@ -21,4 +21,3 @@ No settings at this time.
 ## Known Issues
 
 - Likely a few
-

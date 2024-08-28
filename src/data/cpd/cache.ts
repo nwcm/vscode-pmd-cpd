@@ -29,7 +29,7 @@ export class CPDCache {
       (file) => {
         this.readData(file);
         var watcher = vscode.workspace.createFileSystemWatcher(
-          new vscode.RelativePattern(file, "*")
+          new vscode.RelativePattern(file, "*"),
         );
         watcher.onDidChange(() => {
           // console.debug(file.toString());
@@ -44,7 +44,7 @@ export class CPDCache {
           self.duplicateData = new Map<string, Array<DuplicationData>>();
           self.fireChange();
         });
-      }
+      },
     );
   }
 
@@ -84,8 +84,8 @@ export class CPDCache {
                   Number(xmlFile.line),
                   Number(xmlFile.endline),
                   Number(xmlFile.column),
-                  Number(xmlFile.endcolumn)
-                )
+                  Number(xmlFile.endcolumn),
+                ),
               );
             });
 
@@ -116,7 +116,7 @@ export class CPDCache {
                 endLine,
                 tokensDuplicate,
                 Number(dupFile.column),
-                Number(dupFile.endColumn)
+                Number(dupFile.endColumn),
               );
 
               // this.diagnosticCollection.set(file, issues);
@@ -135,9 +135,9 @@ export class CPDCache {
       },
       (reason) => {
         console.log(
-          "Could not read duplication data from " + file + " because " + reason
+          "Could not read duplication data from " + file + " because " + reason,
         );
-      }
+      },
     );
   }
 
