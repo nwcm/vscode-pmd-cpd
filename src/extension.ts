@@ -15,16 +15,29 @@ export function activate(context: vscode.ExtensionContext) {
   const cpdGutters = new CPDGutters(data, config, context);
   const duplicateProvider = new DuplicateCodeProvider(data);
 
+  const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
+  statusBarItem.name = "dup";
+  statusBarItem.text = "$(light-bulb) Show duplicate code";
+  statusBarItem.tooltip = "Show duplicate code";
+  statusBarItem.command = 'pmd-cpd.showDuplicates';
+  statusBarItem.show();
+
   const showCPDGutters = vscode.commands.registerCommand(
     "pmd-cpd.showDuplicates",
     () => {
       cpdGutters.showDuplicates();
+      statusBarItem.text = "$(light-bulb) Hide duplicate code";
+      statusBarItem.tooltip = "Hide duplicate code";
+      statusBarItem.command = 'pmd-cpd.hideDuplicates';
     },
   );
   const hideCPDGutters = vscode.commands.registerCommand(
     "pmd-cpd.hideDuplicates",
     () => {
       cpdGutters.hideDuplicates();
+      statusBarItem.text = "$(light-bulb) Show duplicate code";
+      statusBarItem.tooltip = "Show duplicate code";
+      statusBarItem.command = 'pmd-cpd.showDuplicates';
     },
   );
 
@@ -40,7 +53,10 @@ export function activate(context: vscode.ExtensionContext) {
     hideCPDGutters,
     refreshCPDTree,
     config,
+    statusBarItem
   );
+  // context.subscriptions.push(statusBarItem);
+  
 
   vscode.window.registerTreeDataProvider(
     "cpd.DuplicateCode",
