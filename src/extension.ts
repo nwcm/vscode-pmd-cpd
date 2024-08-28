@@ -16,14 +16,14 @@ export function activate(context: vscode.ExtensionContext) {
 	const duplicateProvider = new DuplicateCodeProvider(data);
 	
 
-	const showCPDGutters = vscode.commands.registerCommand('codeanalysis.pmd.showDuplicates', () => {
+	const showCPDGutters = vscode.commands.registerCommand('pmd-cpd.showDuplicates', () => {
 		cpdGutters.showDuplicates();
 	});
-	const hideCPDGutters = vscode.commands.registerCommand('codeanalysis.pmd.hideDuplicates', () => {
+	const hideCPDGutters = vscode.commands.registerCommand('pmd-cpd.hideDuplicates', () => {
 		cpdGutters.hideDuplicates();
 	});
 
-	const refreshCPDTree = vscode.commands.registerCommand('codeanalysis.pmd.refreshDuplicates', () => {
+	const refreshCPDTree = vscode.commands.registerCommand('pmd-cpd.refreshDuplicates', () => {
 		duplicateProvider.refresh();
 	});
 

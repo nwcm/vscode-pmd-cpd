@@ -1,15 +1,15 @@
 {
-  "name": "codeanalysis",
-  "displayName": "codeanalysis",
-  "description": "Render information from various code analysis tools. Starting with PMD-CPD and Spotbugs.",
-  "version": "0.0.4",
+  "name": "pmd-cpd",
+  "displayName": "PMD CPD",
+  "description": "Explore and highlight PMD copy paste detections for APEX",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "git@github.com:MikeNeilson/codeanalysis-gutters.git"
+    "url": "git@github.com:nwcm/codeanalysis-gutters.git"
   },
   "license": "CC0 1.0 Universal",
   "engines": {
-    "vscode": "^1.75.0"
+    "vscode": "^1.91.0"
   },
   "categories": [
     "Other",
@@ -21,17 +21,17 @@
   "contributes": {
     "commands": [
       {
-        "command": "codeanalysis.pmd.showDuplicates",
+        "command": "pmd-cpd.showDuplicates",
         "title": "Show Duplicate Code",
         "category": "Code Analysis-PMD"
       },
       {
-        "command": "codeanalysis.pmd.hideDuplicates",
+        "command": "pmd-cpd.hideDuplicates",
         "title": "Hide Duplicate Code Indicators",
         "category": "Code Analysis-PMD"
       },
       {
-        "command": "codeanalysis.pmd.refreshDuplicates",
+        "command": "pmd-cpd.refreshDuplicates",
         "title": "Refresh Duplicate Tree",
         "category": "Code Analysis-PMD"
       }
@@ -39,7 +39,7 @@
      
     ],
     "views": {
-      "code-analysis": [
+      "pmd-cpd": [
         {
           "id": "cpd.DuplicateCode",
           "name": "Duplicate Code"
@@ -49,9 +49,9 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "code-analysis",
-          "title": "Code Analysis",
-          "icon": "$(bug)"
+          "id": "pmd-cpd",
+          "title": "Copy Paste Detection",
+          "icon": "$(output-view-icon)"
         }
       ]
     },
