@@ -5,7 +5,6 @@ A tool to highlight lines of duplicated code flagged by PMD CPD CLI
 ## Features
 
 - Show [PMD-CPD](https://pmd.github.io/latest/pmd_userdocs_cpd.html) duplication information.
-  - searches repository for xml files and checks if they contain a "pmd-cpd" root.
   - hover text has links to other files with the duplicate code.
   - highlights minor,major,critical based on number of tokens (not yet user configurable.)
 
