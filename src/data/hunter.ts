@@ -14,14 +14,12 @@ type FileCheckCallback = (file: vscode.Uri) => Thenable<boolean>;
  */
 export class FileHunter {
     public readonly files = new Array<vscode.Uri>();
-    private whenFound: FileCallback;
 
     public constructor(glob: string = "**/*.xml",fileVerifier: FileCheckCallback,whenFound: FileCallback) {
-        var self = this;
-        this.whenFound = whenFound;
         console.log("Starting file hunt");
-        vscode.workspace.findFiles("**/*.xml").then( (files: vscode.Uri[])=> {
+        vscode.workspace.findFiles("reports/cpd.xml").then( (files: vscode.Uri[])=> {
             files.forEach( (file) => {
+                console.debug(file);
                 fileVerifier(file).then((result)=> {
                     if (result) {
                         console.log("Found file for this hunter: " + file.toString());

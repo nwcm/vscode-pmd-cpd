@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { CONFIDENCE_KEY, rankConcerning, rankScariest, RANK_KEY, updateConfidenceFilterContext } from './data/spotbugs/gui/confidence';
 
 
 export class CPDConfig {
@@ -50,93 +49,12 @@ export class CPDConfig {
 export type ConfidenceChangeCallBack = (confidences: Array<number>) => void;
 export type RankChangeCallback = (minRank: number) => void;
 
-export class SpotBugsConfig {    
-    
-    public readonly colorHigh = new vscode.ThemeColor("spotbugs.highConfidence");
-    public readonly colorNormal = new vscode.ThemeColor("spotbugs.normalConfidence");
-    public readonly colorLow = new vscode.ThemeColor("spotbugs.lowConfidence");
-    public confidences: Array<number> = [1,2,3];
-    private confidenceChangeCallBacks: Array<ConfidenceChangeCallBack> = [];
-    private minimumRank: number = rankConcerning.startValue;
-    private rankChangeCallbacks: Array<RankChangeCallback> = [];
-
-    public readonly decTypeHigh = vscode.window.createTextEditorDecorationType({
-        isWholeLine: true,
-        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: this.colorHigh,
-        overviewRulerColor: this.colorHigh,
-        overviewRulerLane: vscode.OverviewRulerLane.Center
-    });
-
-    public readonly decTypeNormal = vscode.window.createTextEditorDecorationType({
-        isWholeLine: true,
-        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: this.colorNormal,
-        overviewRulerColor: this.colorNormal,
-        overviewRulerLane: vscode.OverviewRulerLane.Center
-    });
-
-    public readonly decTypeLow = vscode.window.createTextEditorDecorationType({
-        isWholeLine: true,
-        rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        backgroundColor: this.colorLow,
-        overviewRulerColor: this.colorLow,
-        overviewRulerLane: vscode.OverviewRulerLane.Center
-    });
-
-    public constructor(private readonly context: vscode.ExtensionContext) {
-        this.onConfidenceChange((c) => updateConfidenceFilterContext(c));
-        this.setConfidences(context.workspaceState.get(CONFIDENCE_KEY) || [1,2,3]);
-        this.setMinimumRank(context.workspaceState.get(RANK_KEY) || rankConcerning.startValue);
-    }
-
-    public getConfidences(): Array<number> {
-        return this.confidences;
-    }
-
-    public setConfidences(confidences: Array<number>) {
-        this.confidences = confidences;
-        this.context.workspaceState.update(CONFIDENCE_KEY,confidences);
-        this.confidenceChangeCallBacks.forEach((cb)=> {
-            cb(confidences);
-        });
-    }
-
-    public getMinimumRank(): Number {
-        return this.minimumRank;
-    }
-
-    public setMinimumRank(rank: number| Array<number>) {
-        
-        if(rank instanceof Array<number> ) {
-            rank.sort();
-            this.minimumRank = rank[-1];
-        } else {
-            this.minimumRank = rank;
-        }
-        this.context.workspaceState.update(RANK_KEY,this.minimumRank);
-        this.rankChangeCallbacks.forEach(cb=>{
-            cb(this.minimumRank);
-        });
-    }
-
-    public onConfidenceChange(cb: ConfidenceChangeCallBack): void {
-        this.confidenceChangeCallBacks.push(cb);
-    }
-
-    public onRankChange(cb: RankChangeCallback): void {
-        this.rankChangeCallbacks.push(cb);
-    }
-}
-
 
 export class CodeAnalysisConfig implements vscode.Disposable{
     public readonly cpdConfig = new CPDConfig(300,700);
-    public readonly spotbugsConfig: SpotBugsConfig;
     private static staticInstance: CodeAnalysisConfig;
 
     private constructor(private readonly context: vscode.ExtensionContext) {
-        this.spotbugsConfig = new SpotBugsConfig(context);
     }
 
     public static init(context: vscode.ExtensionContext): void {

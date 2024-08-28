@@ -1,5 +1,5 @@
-import * as xml from 'xml2js';
-import * as fs from 'fs';
+// import * as xml from 'xml2js';
+// import * as fs from 'fs';
 import * as vscode from 'vscode';
 
 /**
@@ -9,10 +9,20 @@ import * as vscode from 'vscode';
 export class OtherFile {
     public readonly file: vscode.Uri;
     public readonly line: number;
+    public readonly endLine: number;
+    public readonly column: number;
+    public readonly endColumn: number;
 
-    public constructor(file: vscode.Uri, line: number) {
+    public constructor(file: vscode.Uri, line: number, endLine: number, column: number, endColumn: number) {
         this.file = file;
         this.line = line;
+        this.endLine = endLine;
+        this.column = column;
+        this.endColumn = endColumn;
+    }
+
+    get range(){
+        return new vscode.Range(this.line-1, this.column-1, this.endLine-1, this.endColumn-1);
     }
 
     /**
@@ -20,7 +30,7 @@ export class OtherFile {
      * @returns text for the [] portions of the Markdown link.
      */
     public linkText(): string {
-        return this.file.toString() + ":" + this.line.toFixed(0);
+        return vscode.workspace.asRelativePath(this.file) + ":" + this.line.toFixed(0);
     }
 
     /**
@@ -29,27 +39,49 @@ export class OtherFile {
      * @returns proper link with anchor.
      */
     public link(): string {
-        return this.file.toString() + "#" + this.line.toFixed(0);
+        return this.file + "#" + this.line.toFixed(0);
     }
 }
+
+// export class DuplicationFile {
+//     public readonly path: vscode.Uri;
+//     public readonly line: number;
+//     public readonly endLine: number;
+//     public readonly beginToken: number;
+//     public readonly endToken: number;
+//     public readonly column: number;
+//     public readonly endColumn: number;
+
+//     public constructor(path: String, ) {
+//         this.path = vscode.Uri.file(path);
+//     }
+// }
 
 /**
  * Contains the duplication data and function to retrieve the ranges
  */
 export class DuplicationData {
-    public readonly thisFile: string;
+    public readonly thisFile: vscode.Uri;
     public readonly otherFiles: OtherFile[];
     public readonly startLine: number;
     public readonly endLine: number;
     public readonly numTokens: number;
+    public readonly column: number;
+    public readonly endColumn: number;
 
-    public constructor(thisFile:string,otherFiles: OtherFile[],startLine: number,
-                       endLine: number, numTokens: number) {
+    public constructor(thisFile: vscode.Uri, otherFiles: OtherFile[], startLine: number,
+        endLine: number, numTokens: number, column: number, endColumn: number) {
         this.thisFile = thisFile;
         this.otherFiles = otherFiles;
         this.startLine = startLine;
         this.endLine = endLine;
         this.numTokens = numTokens;
+        this.column = column;
+        this.endColumn = endColumn;
+    }
+
+    get range(){
+        return new vscode.Range(this.startLine-1, this.column-1, this.endLine-1, this.endColumn-1);
     }
 
     /**
@@ -57,14 +89,19 @@ export class DuplicationData {
      * @returns DecorationOptions containing the ranges and links to the other files
      */
     public getDecorationInformation() {
-        var msg = new vscode.MarkdownString("# This is duplicated with:\r\n---\r\n\r\n");
+        var msg = new vscode.MarkdownString("## This is duplicated:\r\n");
         this.otherFiles.forEach((file) => {
-            msg.appendMarkdown("- ["+ file.linkText() +"](" + file.link() + ")\r\n");
+            if(file.file === this.thisFile){
+                msg.appendMarkdown("- [This File]](" + file.link() + ")\r\n");
+            } else {
+                msg.appendMarkdown("- [" + file.linkText() + "](" + file.link() + ")\r\n");
+            }
+           
         });
         //msg.isTrusted = true;
         return {
             hoverMessage: msg,
-            range: new vscode.Range(this.startLine,0,this.endLine,0)
+            range: this.range
         };
     }
 }
@@ -76,7 +113,7 @@ export class DuplicationData {
  * @returns Uri to the file with workspace dir added if needed.
  */
 export function expandedUri(file: string): vscode.Uri {
-    if( file.match("[a-zA-Z]*://.*") ) {
+    if (file.match("[a-zA-Z]*://.*")) {
         return vscode.Uri.parse(file);
     }
     var uri = vscode.Uri.file(file);

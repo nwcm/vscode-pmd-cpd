@@ -34,84 +34,15 @@
         "command": "codeanalysis.pmd.refreshDuplicates",
         "title": "Refresh Duplicate Tree",
         "category": "Code Analysis-PMD"
-      },
-      {
-        "command": "codeanalysis.spotbugs.showBugs",
-        "title": "Show Spotbugs data",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.hideBugs",
-        "title": "Hide Spotbugs Data",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.refreshBugs",
-        "title": "Refresh Spotbugs",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.Confidence",
-        "title": "Select Bug Confidence",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.Ranks",
-        "title": "Select minimum Bug Rank",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.confidence.showLow",
-        "title": "-  Low",
-        "enablement": "view == spotbugs.Bugs",
-        "icon": "blank",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.confidence.hideLow",
-        "title": "✓ Low",
-        "icon": "check",
-        "enablement": "view == spotbugs.Bugs",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.confidence.showNormal",
-        "title": "-  Normal",
-        "enablement": "view == spotbugs.Bugs",
-        "icon": "blank",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.confidence.hideNormal",
-        "title": "✓  Normal",
-        "icon": "check",
-        "enablement": "view == spotbugs.Bugs",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.confidence.showHigh",
-        "title": "-  High",
-        "enablement": "view == spotbugs.Bugs",
-        "icon": "blank",
-        "category": "Code Analysis-Spotbugs"
-      },
-      {
-        "command": "codeanalysis.spotbugs.confidence.hideHigh",
-        "title": "✓  High",
-        "icon": "check",
-        "enablement": "view == spotbugs.Bugs",
-        "category": "Code Analysis-Spotbugs"
       }
+      
+     
     ],
     "views": {
       "code-analysis": [
         {
           "id": "cpd.DuplicateCode",
           "name": "Duplicate Code"
-        },
-        {
-          "id": "spotbugs.Bugs",
-          "name": "Spotbugs"
         }
       ]
     },
@@ -128,65 +59,6 @@
       {
         "view": "cpd.DuplicateCode",
         "contents": "No duplicate files found or not processed yet."
-      },
-      {
-        "view": "spotbugs.Bugs",
-        "contents": "No Spotbugs files found or not processed yet."
-      }
-    ],
-    "menus": {
-      "view/title": [
-        {
-          "when": "view == spotbugs.Bugs",
-          "submenu": "spotbugs.filter"
-        }
-      ],
-      "spotbugs.filter": [
-        {
-          "submenu": "spotbugs.filter.confidence"
-        }
-      ],
-      "spotbugs.filter.confidence": [
-        {
-          "command": "codeanalysis.spotbugs.confidence.showLow",
-          "when": "codeanalysis.spotbugs.confidence.low.show == false",
-          "group": "confidence@1"
-        },
-        {
-          "command": "codeanalysis.spotbugs.confidence.hideLow",
-          "when": "codeanalysis.spotbugs.confidence.low.show == true",
-          "group": "confidence@1"
-        },
-        {
-          "command": "codeanalysis.spotbugs.confidence.showNormal",
-          "when": "codeanalysis.spotbugs.confidence.normal.show == false",
-          "group": "confidence@2"
-        },
-        {
-          "command": "codeanalysis.spotbugs.confidence.hideNormal",
-          "when": "codeanalysis.spotbugs.confidence.normal.show == true",
-          "group": "confidence@2"
-        },
-        {
-          "command": "codeanalysis.spotbugs.confidence.showHigh",
-          "when": "codeanalysis.spotbugs.confidence.high.show == false",
-          "group": "confidence@3"
-        },
-        {
-          "command": "codeanalysis.spotbugs.confidence.hideHigh",
-          "when": "codeanalysis.spotbugs.confidence.high.show == true",
-          "group": "confidence@3"
-        }
-      ]
-    },
-    "submenus": [
-      {
-        "id": "spotbugs.filter",
-        "label": "Filter"
-      },
-      {
-        "id": "spotbugs.filter.confidence",
-        "label": "Confidence"
       }
     ],
     "colors": [
@@ -208,30 +80,6 @@
       },
       {
         "id": "duplicateStatus.minor",
-        "description": "Background highlight color to make small sections of duplicated code obvious.",
-        "defaults": {
-          "dark": "#f1c21b20",
-          "light": "#f1c21b20"
-        }
-      },
-      {
-        "id": "spotbugs.highConfidence",
-        "description": "Background highlight color to make large sections of duplicated code obvious.",
-        "defaults": {
-          "dark": "#fa4d5620",
-          "light": "#da1e2820"
-        }
-      },
-      {
-        "id": "spotbugs.normalConfidence",
-        "description": "Background highlight color to make medium sections of duplicated code obvious.",
-        "defaults": {
-          "dark": "#ff832b20",
-          "light": "#ff832b20"
-        }
-      },
-      {
-        "id": "spotbugs.lowConfidence",
         "description": "Background highlight color to make small sections of duplicated code obvious.",
         "defaults": {
           "dark": "#f1c21b20",

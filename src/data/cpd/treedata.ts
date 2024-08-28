@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import { CPDCache } from './cache';
 import { DuplicationData, expandedUri, OtherFile } from './fileops';
 
+const ws = vscode.workspace;
+
 interface DuplicationNode {
     item(): vscode.TreeItem | Promise<vscode.TreeItem>;
     children(): DuplicationNode[] | undefined;
@@ -10,16 +12,16 @@ interface DuplicationNode {
 class DuplicationOtherFileNode implements DuplicationNode {
     public constructor(
         private readonly otherFile: OtherFile
-    ) {}
+    ) { }
+
     item(): vscode.TreeItem | Promise<vscode.TreeItem> {
-        let ws = vscode.workspace;
         let of = this.otherFile;
         return {
             resourceUri: of.file,
             label: `${ws.asRelativePath(of.file)}:${of.line.toFixed(0)}`,
             command: {
                 command: 'vscode.open',
-                arguments: [of.file,{selection: new vscode.Range(of.line,0,of.line,0)}],
+                arguments: [of.file, { selection: of.range }],
                 title: 'Open Other File'
             }
         };
@@ -33,27 +35,27 @@ class DuplicationOtherFileNode implements DuplicationNode {
 class DuplicationThisFileNode implements DuplicationNode {
     public constructor(
         private readonly data: DuplicationData
-    ) {}
+    ) { }
 
 
     item(): vscode.TreeItem | Promise<vscode.TreeItem> {
         return {
-            resourceUri: expandedUri(this.data.thisFile),
-            label: `At Line ${this.data.startLine}, ${this.data.numTokens} tokens Also in the following files`,
+            resourceUri: this.data.thisFile,
+            label: `At Line ${this.data.startLine.toFixed(0)}, ${this.data.numTokens} tokens. Also in the following files`,
             command: {
                 command: 'vscode.open',
-                arguments: [expandedUri(this.data.thisFile),
-                            {
-                                selection: new vscode.Range(this.data.startLine,0,this.data.endLine,0)
-                            }
-                        ],
+                arguments: [this.data.thisFile,
+                {
+                    selection: this.data.range
+                }
+                ],
                 title: 'Open File'
             },
             collapsibleState: vscode.TreeItemCollapsibleState.Collapsed
         };
     }
     children(): DuplicationNode[] | undefined {
-        return this.data.otherFiles.map((of) => new DuplicationOtherFileNode(of));        
+        return this.data.otherFiles.map((of) => new DuplicationOtherFileNode(of));
     }
 
 }
@@ -62,10 +64,9 @@ class DuplicationRootFileNode implements DuplicationNode {
     public constructor(
         public readonly uri: vscode.Uri,
         private readonly cache: CPDCache
-    ) {}
+    ) { }
 
     item(): vscode.TreeItem | Promise<vscode.TreeItem> {
-        let ws = vscode.workspace;
         return {
             resourceUri: this.uri,
             label: ws.asRelativePath(this.uri),
@@ -90,10 +91,10 @@ export class DuplicateCodeProvider implements vscode.TreeDataProvider<Duplicatio
 
     public constructor(duplicateCache: CPDCache) {
         this.duplicateCache = duplicateCache;
-        this.duplicateCache.onChange( () => {
+        this.duplicateCache.onChange(() => {
             this.refresh();
         });
-    }    
+    }
 
     private _onDidChangeTreeData: vscode.EventEmitter<DuplicationNode | undefined | null | void> = new vscode.EventEmitter<DuplicationNode | undefined | null | void>();
     readonly onDidChangeTreeData: vscode.Event<DuplicationNode | undefined | null | void> = this._onDidChangeTreeData.event;
@@ -108,10 +109,10 @@ export class DuplicateCodeProvider implements vscode.TreeDataProvider<Duplicatio
     getChildren(element?: DuplicationNode | undefined): vscode.ProviderResult<DuplicationNode[]> {
         var items = new Array<DuplicationNode>();
         let cache = this.duplicateCache;
-        if(element) {
+        if (element) {
             items = element.children() || [];
         } else {
-            items = cache.getKnownFiles().map((uri)=>new DuplicationRootFileNode(uri,this.duplicateCache));
+            items = cache.getKnownFiles().map((uri) => new DuplicationRootFileNode(uri, this.duplicateCache));
         }
         return Promise.resolve(items);
     }
