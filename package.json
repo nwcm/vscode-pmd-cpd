@@ -2,7 +2,7 @@
   "name": "pmd-cpd",
   "displayName": "PMD CPD",
   "description": "Explore and highlight PMD copy paste detections for APEX",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/nwcm/codeanalysis-gutters"
@@ -27,7 +27,7 @@
       },
       {
         "command": "pmd-cpd.hideDuplicates",
-        "title": "Hide Duplicate Code Indicators",
+        "title": "Hide Duplicate Code",
         "category": "Code Analysis-PMD"
       },
       {
@@ -115,7 +115,7 @@
             "Hide"
           ],
           "default": "Hide",
-          "description": "Specifies on load of extension where to show or hide highlighting duplicate code."
+          "description": "Specifies on load of extension to show or hide highlighting duplicate code."
         },
         "pmd-cpd.language": {
           "type": "string",
