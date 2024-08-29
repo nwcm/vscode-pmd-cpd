@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/nwcm/codeanalysis-gutters"
   },
-  "license": "CC0 1.0 Universal",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.92.0"
   },
