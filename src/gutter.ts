@@ -3,6 +3,9 @@ import { CodeAnalysisConfig } from "./config";
 import { CPDCache } from "./data/cpd/cache";
 import { REPORT_OUTPUT_DIRECTORY } from "./extension";
 
+import fs from "fs";
+import path from "path";
+
 enum State {
   renderOn,
   renderOff,
@@ -16,7 +19,7 @@ export class CPDGutters {
   private duplicateState: State;
   private config: CodeAnalysisConfig;
   private statusBarItem: vscode.StatusBarItem;
-  private static userTerminal: vscode.Terminal;
+  private userTerminal: vscode.Terminal | undefined;
 
   public constructor(
     duplicates: CPDCache,
@@ -88,17 +91,31 @@ export class CPDGutters {
     this.toggleStatusBarItem();
   }
 
-  public scanForDuplicates() {
-    const terminal =
-      CPDGutters.userTerminal ?? vscode.window.createTerminal(`PMD-CPD`);
-    CPDGutters.userTerminal = terminal;
+  public async scanForDuplicates() {
+    this.userTerminal = vscode.window.createTerminal({
+      name: "PMD-CPD",
+      isTransient: true,
+    });
+    
+    this.userTerminal.show();
 
+    const outputs = await vscode.workspace.findFiles(
+      `${REPORT_OUTPUT_DIRECTORY}/*.xml`
+    );
+
+    // if no current files in folder type and make dir
+    if (outputs.length === 0) {
+      this.userTerminal.sendText(`mkdir -p ${REPORT_OUTPUT_DIRECTORY}`);
+    }
+
+    this.cpdCommands();
+  }
+
+  private cpdCommands(){
     const directory = this.config.userSettings.sourceDirectory ?? ".";
 
-    terminal.sendText(`mkdir ${REPORT_OUTPUT_DIRECTORY}`);
-
     for (const language of this.config.userSettings.language) {
-      terminal.sendText(
+      this.userTerminal?.sendText(
         `pmd cpd --format xml --minimum-tokens ${this.config.userSettings.minimumDuplicateTokens} --language ${language} --dir ${directory} > ${REPORT_OUTPUT_DIRECTORY}/${language}.xml`
       );
     }
@@ -145,3 +162,4 @@ export class CPDGutters {
     }
   }
 }
+

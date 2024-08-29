@@ -30,7 +30,6 @@ export class CPDCache {
           new vscode.RelativePattern(file, "*"),
         );
         watcher.onDidChange(() => {
-          // console.debug(file.toString());
           this.duplicateData = new Map<string, Array<DuplicationData>>();
           this.readData(file);
         });

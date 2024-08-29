@@ -39,9 +39,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   const scanForDuplicates = vscode.commands.registerCommand(
     `${EXTENSION_NAME}.scanForDuplicates`,
-    () => {
-      cpdGutters.scanForDuplicates();
-      duplicateProvider.refresh();
+    async () => {
+      cpdGutters.scanForDuplicates().then(()=>{
+        duplicateProvider.refresh();
+      });
     },
   );
 

@@ -21,15 +21,14 @@ export class FileHunter {
     fileVerifier: FileCheckCallback,
     whenFound: FileCallback,
   ) {
-    console.log("Starting file hunt");
+    console.log("Searching for PMD CPD outputs");
     vscode.workspace
       .findFiles(`${REPORT_OUTPUT_DIRECTORY}/*.xml`)
       .then((files: vscode.Uri[]) => {
         files.forEach((file) => {
-          console.debug(file);
           fileVerifier(file).then((result) => {
             if (result) {
-              console.log("Found file for this hunter: " + file.toString());
+              console.log("Found cpd file: " + file.toString());
               whenFound(file);
             }
           });
