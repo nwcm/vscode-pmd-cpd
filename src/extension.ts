@@ -20,32 +20,48 @@ export function activate(context: vscode.ExtensionContext) {
     `${EXTENSION_NAME}.showDuplicates`,
     () => {
       cpdGutters.showDuplicates();
-    }
+    },
   );
   const hideCPDGutters = vscode.commands.registerCommand(
     `${EXTENSION_NAME}.hideDuplicates`,
     () => {
       cpdGutters.hideDuplicates();
-    }
+    },
   );
 
   const refreshCPDTree = vscode.commands.registerCommand(
     `${EXTENSION_NAME}.refreshDuplicates`,
     () => {
       duplicateProvider.refresh();
-    }
+    },
   );
+
+  const scanForDuplicates = vscode.commands.registerCommand(
+    `${EXTENSION_NAME}.scanForDuplicates`,
+    () => {
+      cpdGutters.scanForDuplicates();
+      duplicateProvider.refresh();
+    },
+  );
+
+  // const clearDuplicates = vscode.commands.registerCommand(
+  //   `${EXTENSION_NAME}.clearDuplicates`,
+  //   () => {
+  //     // duplicateProvider.refresh();
+  //   }
+  // );
 
   context.subscriptions.push(
     showCPDGutters,
     hideCPDGutters,
     refreshCPDTree,
-    config
+    scanForDuplicates,
+    config,
   );
 
   vscode.window.registerTreeDataProvider(
     "pmd-cpd.DuplicateCode",
-    duplicateProvider
+    duplicateProvider,
   );
 }
 

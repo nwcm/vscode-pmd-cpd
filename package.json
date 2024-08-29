@@ -34,6 +34,11 @@
         "command": "pmd-cpd.refreshDuplicates",
         "title": "Refresh Duplicate Tree",
         "category": "Code Analysis-PMD"
+      },
+      {
+        "command": "pmd-cpd.scanForDuplicates",
+        "title": "Scan Source for Duplicates",
+        "category": "Code Analysis-PMD"
       }
     ],
     "views": {
@@ -88,6 +93,11 @@
     "configuration": {
       "title": "PMD CPD",
       "properties": {
+        "pmd-cpd.minimumDuplicateTokens": {
+          "type": "number",
+          "default": 100,
+          "description": "The minimum number of tokens to consider a duplicate."
+        },
         "pmd-cpd.minorIssueTokenThreshold": {
           "type": "number",
           "default": 300,
@@ -106,6 +116,55 @@
           ],
           "default": "Hide",
           "description": "Specifies on load of extension where to show or hide highlighting duplicate code."
+        },
+        "pmd-cpd.language": {
+          "type": "string",
+          "enum": [
+            "apex",
+            "coco",
+            "cpp",
+            "cs",
+            "dart",
+            "ecmascript",
+            "fortran",
+            "gherkin",
+            "go",
+            "groovy",
+            "html",
+            "java",
+            "jsp",
+            "julia",
+            "kotlin",
+            "lua",
+            "matlab",
+            "modelica",
+            "objectivec",
+            "perl",
+            "php",
+            "plsql",
+            "pom",
+            "python",
+            "ruby",
+            "scala",
+            "swift",
+            "tsql",
+            "typescript",
+            "velocity",
+            "visualforce",
+            "wsdl",
+            "xml",
+            "xsl"
+          ],
+          "default": "java",
+          "description": "Specifies PMD CPD language. See https://pmd.github.io/pmd/pmd_userdocs_cpd.html#supported-languages"
+        },
+        "pmd-cpd.sourceDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "Specifies the source folder to scan.",
+          "examples": [
+            "src/"
+          ]
         }
       }
     }
