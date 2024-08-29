@@ -1,7 +1,7 @@
 {
   "name": "pmd-cpd",
-  "displayName": "PMD CPD",
-  "description": "Explore and highlight PMD copy paste detections",
+  "displayName": "PMD Copy/Paste Detector (CPD)",
+  "description": "Explore and highlight duplicate code from the PMD's Copy/Paste Detector (CPD) engine.",
   "version": "0.2.0",
   "repository": {
     "type": "git",
