@@ -32,7 +32,7 @@
       },
       {
         "command": "pmd-cpd.refreshDuplicates",
-        "title": "Refresh Duplicate Tree",
+        "title": "Refresh Duplicates",
         "category": "Code Analysis-PMD"
       },
       {
