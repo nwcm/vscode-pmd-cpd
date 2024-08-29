@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { CPDCache } from "./cache";
-import { DuplicationData, expandedUri, OtherFile } from "./fileops";
+import { DuplicationData, OtherFile } from "./fileops";
 
 const ws = vscode.workspace;
 
@@ -13,7 +13,7 @@ class DuplicationOtherFileNode implements DuplicationNode {
   public constructor(private readonly otherFile: OtherFile) {}
 
   item(): vscode.TreeItem | Promise<vscode.TreeItem> {
-    let of = this.otherFile;
+    const of = this.otherFile;
     return {
       resourceUri: of.file,
       label: `${ws.asRelativePath(of.file)}:${of.line.toFixed(0)}`,
@@ -110,8 +110,8 @@ export class DuplicateCodeProvider
   getChildren(
     element?: DuplicationNode | undefined,
   ): vscode.ProviderResult<DuplicationNode[]> {
-    var items = new Array<DuplicationNode>();
-    let cache = this.duplicateCache;
+    let items = new Array<DuplicationNode>();
+    const cache = this.duplicateCache;
     if (element) {
       items = element.children() || [];
     } else {
@@ -121,13 +121,13 @@ export class DuplicateCodeProvider
     }
     return Promise.resolve(items);
   }
-  getParent?(element: DuplicationNode): vscode.ProviderResult<DuplicationNode> {
+  getParent?(): vscode.ProviderResult<DuplicationNode> {
     throw new Error("Method not implemented.");
   }
   resolveTreeData?(
-    item: vscode.TreeItem,
-    element: DuplicationData,
-    token: vscode.CancellationToken,
+    // item: vscode.TreeItem,
+    // element: DuplicationData,
+    // token: vscode.CancellationToken,
   ): vscode.ProviderResult<vscode.TreeItem> {
     throw new Error("Method not implemented.");
   }

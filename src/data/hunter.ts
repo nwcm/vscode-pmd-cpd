@@ -1,5 +1,5 @@
-import * as xml from "xml2js";
-import * as fs from "fs";
+// import * as xml from "xml2js";
+// import * as fs from "fs";
 import * as vscode from "vscode";
 
 import { REPORT_OUTPUT_DIRECTORY } from "../extension";

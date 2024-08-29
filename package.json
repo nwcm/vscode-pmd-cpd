@@ -5,19 +5,18 @@
   "version": "0.2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nwcm/codeanalysis-gutters"
+    "url": "https://github.com/nwcm/vscode-pmd-cpd"
   },
   "license": "MIT",
   "engines": {
-    "vscode": "^1.92.0"
+    "vscode": "^1.91.0"
   },
   "categories": [
-    "Other",
     "Linters",
     "Programming Languages"
   ],
   "activationEvents": [],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -170,30 +169,39 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "check-types": "tsc --noEmit",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "vscode:prepublish": "npm run package",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint",
+    "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/glob": "8.1.0",
-    "@types/mocha": "10.0.1",
-    "@types/node": "16.x",
-    "@types/vscode": "1.92.0",
+    "@eslint/js": "^9.9.1",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.91.0",
     "@types/xml2js": "^0.4.14",
-    "@typescript-eslint/eslint-plugin": "5.53.0",
-    "@typescript-eslint/parser": "5.53.0",
-    "@vscode/test-electron": "2.2.3",
-    "eslint": "8.34.0",
-    "glob": "8.1.0",
-    "mocha": "10.2.0",
-    "ts-loader": "^9.4.2",
-    "typescript": "4.9.5"
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.23.1",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.3.0",
+    "mocha": "^10.7.3",
+    "glob": "^11.0.0",
+    "@types/glob": "^8.1.0"
   },
   "dependencies": {
-    "@vscode/codicons": "^0.0.32",
+    "@vscode/codicons": "^0.0.36",
     "xml2js": "^0.6.2"
   },
   "vsce": {

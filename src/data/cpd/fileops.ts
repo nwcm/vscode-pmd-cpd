@@ -1,5 +1,3 @@
-// import * as xml from 'xml2js';
-// import * as fs from 'fs';
 import * as vscode from "vscode";
 
 /**
@@ -114,7 +112,7 @@ export class DuplicationData {
    * @returns DecorationOptions containing the ranges and links to the other files
    */
   public getDecorationInformation() {
-    var msg = new vscode.MarkdownString("## This is duplicated:\r\n");
+    const msg = new vscode.MarkdownString("## This is duplicated:\r\n");
     this.otherFiles.forEach((file) => {
       if (file.file.toString() === this.thisFile.toString()) {
         msg.appendMarkdown(
@@ -141,7 +139,7 @@ export function expandedUri(file: string): vscode.Uri {
   if (file.match("[a-zA-Z]*://.*")) {
     return vscode.Uri.parse(file);
   }
-  var uri = vscode.Uri.file(file);
+  let uri = vscode.Uri.file(file);
   /** If the file is a relative assume it's from the workspace root
    * and tweak as required
    */

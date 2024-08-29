@@ -6,7 +6,7 @@ class UserSettings {
   public readonly minorIssueTokenThreshold: number;
   public readonly majorIssueTokenThreshold: number;
   public readonly onStartBehavior: string;
-  public readonly language: Array<String>;
+  public readonly language: Array<string>;
   public readonly sourceDirectory: string;
 
   constructor() {

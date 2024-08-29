@@ -17,7 +17,6 @@ export class CPDCache {
     this.duplicateData = new Map<string, Array<DuplicationData>>();
     // this.diagnosticCollection = vscode.languages.createDiagnosticCollection("PMD CPD");
 
-    var self = this;
     this.fileHunter = new FileHunter(
       async (file) => {
         const data = await vscode.workspace.fs.readFile(file);
@@ -27,21 +26,21 @@ export class CPDCache {
       },
       (file) => {
         this.readData(file);
-        var watcher = vscode.workspace.createFileSystemWatcher(
+        const watcher = vscode.workspace.createFileSystemWatcher(
           new vscode.RelativePattern(file, "*"),
         );
         watcher.onDidChange(() => {
           // console.debug(file.toString());
-          self.duplicateData = new Map<string, Array<DuplicationData>>();
-          self.readData(file);
+          this.duplicateData = new Map<string, Array<DuplicationData>>();
+          this.readData(file);
         });
         watcher.onDidCreate(() => {
-          self.duplicateData = new Map<string, Array<DuplicationData>>();
-          self.readData(file);
+          this.duplicateData = new Map<string, Array<DuplicationData>>();
+          this.readData(file);
         });
         watcher.onDidDelete(() => {
-          self.duplicateData = new Map<string, Array<DuplicationData>>();
-          self.fireChange();
+          this.duplicateData = new Map<string, Array<DuplicationData>>();
+          this.fireChange();
         });
       },
     );
@@ -52,7 +51,6 @@ export class CPDCache {
    * @param file uri to the cpd xml file to process
    */
   private readData(file: vscode.Uri) {
-    var self = this;
 
     vscode.workspace.fs.readFile(file).then(
       (data) => {
@@ -120,16 +118,16 @@ export class CPDCache {
 
               // this.diagnosticCollection.set(file, issues);
 
-              if (!self.duplicateData.has(uriString)) {
-                self.duplicateData.set(uriString, new Array<DuplicationData>());
+              if (!this.duplicateData.has(uriString)) {
+                this.duplicateData.set(uriString, new Array<DuplicationData>());
               }
               const dupSet =
-                self.duplicateData.get(uriString) ||
+              this.duplicateData.get(uriString) ||
                 new Array<DuplicationData>();
               dupSet.push(dupElement);
             });
           });
-          self.fireChange();
+          this.fireChange();
         });
       },
       (reason) => {
@@ -161,7 +159,7 @@ export class CPDCache {
    * @returns All Duplicate data for the given file, or []
    */
   public getData(file: vscode.Uri): DuplicationData[] {
-    var duplicates = this.duplicateData.get(file.toString());
+    const duplicates = this.duplicateData.get(file.toString());
     if (duplicates !== null && duplicates !== undefined) {
       return duplicates;
     }
@@ -169,6 +167,6 @@ export class CPDCache {
   }
 
   public getKnownFiles(): Array<vscode.Uri> {
-    return Array.from(this.duplicateData.keys(), (v, k) => expandedUri(v));
+    return Array.from(this.duplicateData.keys(), (v) => expandedUri(v));
   }
 }

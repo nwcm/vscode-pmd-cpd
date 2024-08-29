@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import { CodeAnalysisConfig } from "./config";
 import { CPDCache } from "./data/cpd/cache";
 import { REPORT_OUTPUT_DIRECTORY } from "./extension";
-import * as fs from "fs";
 
 enum State {
   renderOn,
@@ -22,7 +21,7 @@ export class CPDGutters {
   public constructor(
     duplicates: CPDCache,
     config: CodeAnalysisConfig,
-    context: vscode.ExtensionContext,
+    context: vscode.ExtensionContext
   ) {
     this.duplicates = duplicates;
     this.config = config;
@@ -39,7 +38,7 @@ export class CPDGutters {
 
     this.statusBarItem = vscode.window.createStatusBarItem(
       vscode.StatusBarAlignment.Left,
-      1,
+      1
     );
     this.statusBarItem.name = "dup";
     this.toggleStatusBarItem();
@@ -73,10 +72,9 @@ export class CPDGutters {
 
   public showDuplicates() {
     this.duplicateState = State.renderOn;
-    var self = this;
     vscode.window.onDidChangeActiveTextEditor((editor) => {
       if (editor !== undefined) {
-        self.renderDuplicateGutters();
+        this.renderDuplicateGutters();
       }
     });
     this.renderDuplicateGutters();
@@ -85,7 +83,7 @@ export class CPDGutters {
 
   public hideDuplicates() {
     this.duplicateState = State.renderOff;
-    vscode.window.onDidChangeActiveTextEditor((e) => {});
+    vscode.window.onDidChangeActiveTextEditor(() => {});
     this.renderDuplicateGutters();
     this.toggleStatusBarItem();
   }
@@ -97,22 +95,13 @@ export class CPDGutters {
 
     const directory = this.config.userSettings.sourceDirectory ?? ".";
 
-    // const uri = vscode.Uri.file(REPORT_OUTPUT_DIRECTORY);
-    // console.debug(uri);
-
-    // vscode.workspace.fs.readDirectory(uri);
-
-    // vscode.workspace.fs.createDirectory(uri);
-
     terminal.sendText(`mkdir ${REPORT_OUTPUT_DIRECTORY}`);
-    
-    // .then(() => {
-      for(const language of this.config.userSettings.language){
-        terminal.sendText(
-          `pmd cpd --format xml --minimum-tokens ${this.config.userSettings.minimumDuplicateTokens} --language ${language} --dir ${directory} > ${REPORT_OUTPUT_DIRECTORY}/${language}.xml`,
-        );
-      }
-    // });
+
+    for (const language of this.config.userSettings.language) {
+      terminal.sendText(
+        `pmd cpd --format xml --minimum-tokens ${this.config.userSettings.minimumDuplicateTokens} --language ${language} --dir ${directory} > ${REPORT_OUTPUT_DIRECTORY}/${language}.xml`
+      );
+    }
   }
 
   private renderDuplicateGutters() {
@@ -129,9 +118,9 @@ export class CPDGutters {
         const openFile = editor.document.fileName;
         const duplicates = this.duplicates.getData(vscode.Uri.file(openFile));
 
-        var minor = new Array<vscode.DecorationOptions>();
-        var major = new Array<vscode.DecorationOptions>();
-        var critical = new Array<vscode.DecorationOptions>();
+        const minor = new Array<vscode.DecorationOptions>();
+        const major = new Array<vscode.DecorationOptions>();
+        const critical = new Array<vscode.DecorationOptions>();
 
         duplicates?.forEach((duplicate) => {
           if (
