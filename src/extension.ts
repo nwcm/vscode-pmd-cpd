@@ -8,6 +8,7 @@ import { DuplicateCodeProvider } from "./data/cpd/treedata";
 import { CPDGutters } from "./gutter";
 
 export const EXTENSION_NAME = "pmd-cpd";
+export const REPORT_OUTPUT_DIRECTORY = "reports/cpd";
 
 export function activate(context: vscode.ExtensionContext) {
   CodeAnalysisConfig.init(context);
