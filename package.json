@@ -39,7 +39,7 @@
     "views": {
       "pmd-cpd": [
         {
-          "id": "cpd.DuplicateCode",
+          "id": "pmd-cpd.DuplicateCode",
           "name": "Duplicate Code"
         }
       ]
@@ -84,7 +84,31 @@
           "light": "#f1c21b20"
         }
       }
-    ]
+    ],
+    "configuration": {
+      "title": "PMD CPD",
+      "properties": {
+        "pmd-cpd.minorIssueTokenThreshold": {
+          "type": "number",
+          "default": 300,
+          "description": "The token threshold to flag minor issues. Anything below this will be highlighted as minor."
+        },
+        "pmd-cpd.majorIssueTokenThreshold": {
+          "type": "number",
+          "default": 500,
+          "description": "The token threshold to flag major issues. Anything below this but above minor will be highlighted as major. Anything over this is critical."
+        },
+        "pmd-cpd.onStartBehavior": {
+          "type": "string",
+          "enum": [
+            "Show",
+            "Hide"
+          ],
+          "default": "Hide",
+          "description": "Specifies on load of extension where to show or hide highlighting duplicate code."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

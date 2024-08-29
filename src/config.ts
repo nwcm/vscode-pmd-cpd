@@ -1,4 +1,22 @@
 import * as vscode from "vscode";
+import { EXTENSION_NAME } from "./extension";
+
+class UserSettings {
+  public readonly minorIssueTokenThreshold: number;
+  public readonly majorIssueTokenThreshold: number;
+  public readonly onStartBehavior: string;
+
+  constructor() {
+    const settings = vscode.workspace.getConfiguration(EXTENSION_NAME);
+    this.minorIssueTokenThreshold = Number(
+      settings.get("minorIssueTokenThreshold")
+    );
+    this.majorIssueTokenThreshold = Number(
+      settings.get("majorIssueTokenThreshold")
+    );
+    this.onStartBehavior = String(settings.get("onStartBehavior"));
+  }
+}
 
 export class CPDConfig {
   /**
@@ -6,7 +24,7 @@ export class CPDConfig {
    */
   //#fa4d5640";
   public readonly criticalColor = new vscode.ThemeColor(
-    "duplicateStatus.critical",
+    "duplicateStatus.critical"
   );
   //"#ff832b40";
   public readonly majorColor = new vscode.ThemeColor("duplicateStatus.major");
@@ -38,23 +56,14 @@ export class CPDConfig {
     overviewRulerLane: vscode.OverviewRulerLane.Full,
   });
 
-  public constructor(
-    public readonly minor: number,
-    public readonly major: number,
-  ) {
-    if (minor >= major) {
-      throw new Error(
-        "Thresholds must be the following condition: minor < major",
-      );
-    }
-  }
+  public readonly userSettings = new UserSettings();
 }
 
 export type ConfidenceChangeCallBack = (confidences: Array<number>) => void;
 export type RankChangeCallback = (minRank: number) => void;
 
 export class CodeAnalysisConfig implements vscode.Disposable {
-  public readonly cpdConfig = new CPDConfig(300, 700);
+  public readonly cpdConfig = new CPDConfig();
   private static staticInstance: CodeAnalysisConfig;
 
   private constructor(private readonly context: vscode.ExtensionContext) {}
@@ -68,7 +77,7 @@ export class CodeAnalysisConfig implements vscode.Disposable {
   public static instance(): CodeAnalysisConfig {
     if (!CodeAnalysisConfig.staticInstance) {
       throw new Error(
-        "Config must be initialized with the ExtensionContext first.",
+        "Config must be initialized with the ExtensionContext first."
       );
     }
     return CodeAnalysisConfig.staticInstance;

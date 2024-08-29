@@ -7,60 +7,45 @@ import { DuplicateCodeProvider } from "./data/cpd/treedata";
 
 import { CPDGutters } from "./gutter";
 
+export const EXTENSION_NAME = "pmd-cpd";
+
 export function activate(context: vscode.ExtensionContext) {
   CodeAnalysisConfig.init(context);
-  console.debug("activate");
   const config = CodeAnalysisConfig.instance();
   const data = new CPDCache();
   const cpdGutters = new CPDGutters(data, config, context);
   const duplicateProvider = new DuplicateCodeProvider(data);
 
-  const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
-  statusBarItem.name = "dup";
-  statusBarItem.text = "$(light-bulb) Show duplicate code";
-  statusBarItem.tooltip = "Show duplicate code";
-  statusBarItem.command = 'pmd-cpd.showDuplicates';
-  statusBarItem.show();
-
   const showCPDGutters = vscode.commands.registerCommand(
-    "pmd-cpd.showDuplicates",
+    `${EXTENSION_NAME}.showDuplicates`,
     () => {
       cpdGutters.showDuplicates();
-      statusBarItem.text = "$(light-bulb) Hide duplicate code";
-      statusBarItem.tooltip = "Hide duplicate code";
-      statusBarItem.command = 'pmd-cpd.hideDuplicates';
-    },
+    }
   );
   const hideCPDGutters = vscode.commands.registerCommand(
-    "pmd-cpd.hideDuplicates",
+    `${EXTENSION_NAME}.hideDuplicates`,
     () => {
       cpdGutters.hideDuplicates();
-      statusBarItem.text = "$(light-bulb) Show duplicate code";
-      statusBarItem.tooltip = "Show duplicate code";
-      statusBarItem.command = 'pmd-cpd.showDuplicates';
-    },
+    }
   );
 
   const refreshCPDTree = vscode.commands.registerCommand(
-    "pmd-cpd.refreshDuplicates",
+    `${EXTENSION_NAME}.refreshDuplicates`,
     () => {
       duplicateProvider.refresh();
-    },
+    }
   );
 
   context.subscriptions.push(
     showCPDGutters,
     hideCPDGutters,
     refreshCPDTree,
-    config,
-    statusBarItem
+    config
   );
-  // context.subscriptions.push(statusBarItem);
-  
 
   vscode.window.registerTreeDataProvider(
-    "cpd.DuplicateCode",
-    duplicateProvider,
+    "pmd-cpd.DuplicateCode",
+    duplicateProvider
   );
 }
 

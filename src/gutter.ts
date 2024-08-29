@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { CodeAnalysisConfig } from "./config";
 import { CPDCache } from "./data/cpd/cache";
+import { EXTENSION_NAME } from "./extension";
 
 enum State {
   renderOn,
@@ -14,18 +15,54 @@ export class CPDGutters {
   private duplicates: CPDCache;
   private duplicateState: State;
   private config: CodeAnalysisConfig;
+  private statusBarItem: vscode.StatusBarItem;
+  // private userSettings: vscode.WorkspaceConfiguration;
 
   public constructor(
     duplicates: CPDCache,
     config: CodeAnalysisConfig,
     context: vscode.ExtensionContext,
   ) {
+    // this.userSettings = vscode.workspace.getConfiguration(EXTENSION_NAME);
+    // console.debug(JSON.stringify(settings));
+
     this.duplicates = duplicates;
     this.config = config;
-    this.duplicateState = State.renderOff;
-    var onDupsChange = () => this.renderDuplicateGutters();
+    
+    if(this.config.cpdConfig.userSettings.onStartBehavior === 'Show'){
+      this.duplicateState = State.renderOn;
+    } else {
+      this.duplicateState = State.renderOff;
+    }
+    
+
+    const onDupsChange = () => this.renderDuplicateGutters();
 
     this.duplicates.onChange(onDupsChange.bind(this));
+
+    this.statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 1);
+    this.statusBarItem.name = "dup";
+    this.toggleStatusBarItem();
+    this.statusBarItem.show();
+    context.subscriptions.push(this.statusBarItem);
+  }
+
+  toggleStatusBarItem(){
+    this.statusBarItem.text = this.showHideText;
+    this.statusBarItem.tooltip = this.showHideTooltip;
+    this.statusBarItem.command = this.showHideCommand;
+  }
+
+  get showHideText(){
+    return this.duplicateState === State.renderOn ? "$(light-bulb) Hide duplicate code" : "$(light-bulb) Show duplicate code";
+  }
+
+  get showHideTooltip(){
+    return this.duplicateState === State.renderOn ? "Hide duplicate code" : "Show duplicate code";
+  }
+
+  get showHideCommand(){
+    return this.duplicateState === State.renderOn ? "pmd-cpd.hideDuplicates" : "pmd-cpd.showDuplicates";
   }
 
   public showDuplicates() {
@@ -37,12 +74,14 @@ export class CPDGutters {
       }
     });
     this.renderDuplicateGutters();
+    this.toggleStatusBarItem();
   }
 
   public hideDuplicates() {
     this.duplicateState = State.renderOff;
     vscode.window.onDidChangeActiveTextEditor((e) => {});
     this.renderDuplicateGutters();
+    this.toggleStatusBarItem();
   }
 
   private renderDuplicateGutters() {
@@ -64,9 +103,9 @@ export class CPDGutters {
         var critical = new Array<vscode.DecorationOptions>();
 
         duplicates?.forEach((duplicate) => {
-          if (duplicate.numTokens < this.config.cpdConfig.minor) {
+          if (duplicate.numTokens < this.config.cpdConfig.userSettings.minorIssueTokenThreshold) {
             minor.push(duplicate.getDecorationInformation());
-          } else if (duplicate.numTokens < this.config.cpdConfig.major) {
+          } else if (duplicate.numTokens < this.config.cpdConfig.userSettings.majorIssueTokenThreshold) {
             major.push(duplicate.getDecorationInformation());
           } else {
             critical.push(duplicate.getDecorationInformation());
