@@ -2,7 +2,7 @@
   "name": "pmd-cpd",
   "displayName": "PMD CPD",
   "description": "Explore and highlight PMD copy paste detections for APEX",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/nwcm/codeanalysis-gutters"
@@ -27,19 +27,24 @@
       },
       {
         "command": "pmd-cpd.hideDuplicates",
-        "title": "Hide Duplicate Code Indicators",
+        "title": "Hide Duplicate Code",
         "category": "Code Analysis-PMD"
       },
       {
         "command": "pmd-cpd.refreshDuplicates",
-        "title": "Refresh Duplicate Tree",
+        "title": "Refresh Duplicates",
+        "category": "Code Analysis-PMD"
+      },
+      {
+        "command": "pmd-cpd.scanForDuplicates",
+        "title": "Scan Source for Duplicates",
         "category": "Code Analysis-PMD"
       }
     ],
     "views": {
       "pmd-cpd": [
         {
-          "id": "cpd.DuplicateCode",
+          "id": "pmd-cpd.DuplicateCode",
           "name": "Duplicate Code"
         }
       ]
@@ -84,7 +89,85 @@
           "light": "#f1c21b20"
         }
       }
-    ]
+    ],
+    "configuration": {
+      "title": "PMD CPD",
+      "properties": {
+        "pmd-cpd.minimumDuplicateTokens": {
+          "type": "number",
+          "default": 100,
+          "description": "The minimum number of tokens to consider a duplicate."
+        },
+        "pmd-cpd.minorIssueTokenThreshold": {
+          "type": "number",
+          "default": 300,
+          "description": "The token threshold to flag minor issues. Anything below this will be highlighted as minor."
+        },
+        "pmd-cpd.majorIssueTokenThreshold": {
+          "type": "number",
+          "default": 500,
+          "description": "The token threshold to flag major issues. Anything below this but above minor will be highlighted as major. Anything over this is critical."
+        },
+        "pmd-cpd.onStartBehavior": {
+          "type": "string",
+          "enum": [
+            "Show",
+            "Hide"
+          ],
+          "default": "Hide",
+          "description": "Specifies on load of extension to show or hide highlighting duplicate code."
+        },
+        "pmd-cpd.language": {
+          "type": "string",
+          "enum": [
+            "apex",
+            "coco",
+            "cpp",
+            "cs",
+            "dart",
+            "ecmascript",
+            "fortran",
+            "gherkin",
+            "go",
+            "groovy",
+            "html",
+            "java",
+            "jsp",
+            "julia",
+            "kotlin",
+            "lua",
+            "matlab",
+            "modelica",
+            "objectivec",
+            "perl",
+            "php",
+            "plsql",
+            "pom",
+            "python",
+            "ruby",
+            "scala",
+            "swift",
+            "tsql",
+            "typescript",
+            "velocity",
+            "visualforce",
+            "wsdl",
+            "xml",
+            "xsl"
+          ],
+          "default": "java",
+          "description": "Specifies PMD CPD language. See https://pmd.github.io/pmd/pmd_userdocs_cpd.html#supported-languages"
+        },
+        "pmd-cpd.sourceDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "Specifies the source folder to scan.",
+          "examples": [
+            "src/"
+          ]
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
