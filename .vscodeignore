@@ -1,21 +1,22 @@
-# **/*
-# !dist/**
-# !package.json
-# !LICENSE
-# !README.md
-# !CHANGELOG.md
+**/*
+!dist/extension.js
+!package.json
+!LICENSE
+!README.md
+!CHANGELOG.md
 
-.vscode/**
-.vscode-test/**
-out/**
-node_modules/**
-src/**
-.gitignore
-.yarnrc
-esbuild.js
-vsc-extension-quickstart.md
-**/tsconfig.json
-**/.eslintrc.json
-**/*.map
-**/*.ts
-**/.vscode-test.*
+# .vscode/**
+# .vscode-test/**
+# out/**
+# node_modules/**
+# src/**
+# .gitignore
+# .yarnrc
+# esbuild.js
+# vsc-extension-quickstart.md
+# **/tsconfig.json
+# **/.eslintrc.json
+# **/*.map
+# **/*.ts
+# **/.vscode-test.*
+# images/**
