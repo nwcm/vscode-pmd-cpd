@@ -3,9 +3,6 @@ import { CodeAnalysisConfig } from "./config";
 import { CPDCache } from "./data/cpd/cache";
 import { REPORT_OUTPUT_DIRECTORY } from "./extension";
 
-import fs from "fs";
-import path from "path";
-
 enum State {
   renderOn,
   renderOff,

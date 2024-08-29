@@ -11,6 +11,7 @@ export default [
   { ignores: [
     "dist",
     "out",
-    "esbuild.js"
+    "esbuild.js",
+    ".vscode-test"
   ]}
 ];
