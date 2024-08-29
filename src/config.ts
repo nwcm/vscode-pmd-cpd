@@ -6,7 +6,7 @@ class UserSettings {
   public readonly minorIssueTokenThreshold: number;
   public readonly majorIssueTokenThreshold: number;
   public readonly onStartBehavior: string;
-  public readonly language: string;
+  public readonly language: Array<String>;
   public readonly sourceDirectory: string;
 
   constructor() {
@@ -21,7 +21,7 @@ class UserSettings {
       settings.get("majorIssueTokenThreshold"),
     );
     this.onStartBehavior = String(settings.get("onStartBehavior"));
-    this.language = String(settings.get("language"));
+    this.language = String(settings.get("language")).split(',');
     this.sourceDirectory = String(settings.get("sourceDirectory"));
   }
 }

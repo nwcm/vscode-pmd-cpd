@@ -19,7 +19,6 @@ export class CPDCache {
 
     var self = this;
     this.fileHunter = new FileHunter(
-      "**/*.xml",
       async (file) => {
         const data = await vscode.workspace.fs.readFile(file);
 

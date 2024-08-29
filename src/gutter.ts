@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 import { CodeAnalysisConfig } from "./config";
 import { CPDCache } from "./data/cpd/cache";
-import { EXTENSION_NAME } from "./extension";
+import { REPORT_OUTPUT_DIRECTORY } from "./extension";
+import * as fs from "fs";
 
 enum State {
   renderOn,
@@ -17,16 +18,12 @@ export class CPDGutters {
   private config: CodeAnalysisConfig;
   private statusBarItem: vscode.StatusBarItem;
   private static userTerminal: vscode.Terminal;
-  // private userSettings: vscode.WorkspaceConfiguration;
 
   public constructor(
     duplicates: CPDCache,
     config: CodeAnalysisConfig,
     context: vscode.ExtensionContext,
   ) {
-    // this.userSettings = vscode.workspace.getConfiguration(EXTENSION_NAME);
-    // console.debug(JSON.stringify(settings));
-
     this.duplicates = duplicates;
     this.config = config;
 
@@ -99,9 +96,23 @@ export class CPDGutters {
     CPDGutters.userTerminal = terminal;
 
     const directory = this.config.userSettings.sourceDirectory ?? ".";
-    terminal.sendText(
-      `pmd cpd --format xml --minimum-tokens ${this.config.userSettings.minimumDuplicateTokens} --language ${this.config.userSettings.language} --dir ${directory} > reports/cpd.xml`,
-    );
+
+    // const uri = vscode.Uri.file(REPORT_OUTPUT_DIRECTORY);
+    // console.debug(uri);
+
+    // vscode.workspace.fs.readDirectory(uri);
+
+    // vscode.workspace.fs.createDirectory(uri);
+
+    terminal.sendText(`mkdir ${REPORT_OUTPUT_DIRECTORY}`);
+    
+    // .then(() => {
+      for(const language of this.config.userSettings.language){
+        terminal.sendText(
+          `pmd cpd --format xml --minimum-tokens ${this.config.userSettings.minimumDuplicateTokens} --language ${language} --dir ${directory} > ${REPORT_OUTPUT_DIRECTORY}/${language}.xml`,
+        );
+      }
+    // });
   }
 
   private renderDuplicateGutters() {
